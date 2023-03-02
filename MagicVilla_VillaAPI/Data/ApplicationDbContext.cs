@@ -1,4 +1,5 @@
-﻿using MagicVilla_VillaAPI.Models;
+﻿using MagicVilla_VillaAPI.Models.Villa;
+using MagicVilla_VillaAPI.Models.VillaNumber;
 using Microsoft.EntityFrameworkCore;
 
 namespace MagicVilla_VillaAPI.Data
@@ -10,12 +11,14 @@ namespace MagicVilla_VillaAPI.Data
         {
 
         }
-        public DbSet<Villa> Villas { get; set; }
+        public DbSet<VillaModel> Villas { get; set; }
+        public DbSet<VillaNumberModel> VillaNumberModel { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Villa>().HasData(
-              new Villa()
+            modelBuilder.Entity<VillaModel>().HasData(
+              new VillaModel()
               {
                   Id = 1,
                   Name = "Royal Villa",
@@ -28,7 +31,7 @@ namespace MagicVilla_VillaAPI.Data
                   CreatedDate = DateTime.Now
               }
             ,
-              new Villa
+              new VillaModel()
               {
                   Id = 2,
                   Name = "Premium Pool Villa",
@@ -40,7 +43,7 @@ namespace MagicVilla_VillaAPI.Data
                   Amenity = "",
                   CreatedDate = DateTime.Now
               },
-              new Villa
+              new VillaModel()
               {
                   Id = 3,
                   Name = "Luxury Pool Villa",
@@ -52,7 +55,7 @@ namespace MagicVilla_VillaAPI.Data
                   Amenity = "",
                   CreatedDate = DateTime.Now
               },
-              new Villa
+              new VillaModel()
               {
                   Id = 4,
                   Name = "Diamond Villa",
@@ -64,7 +67,7 @@ namespace MagicVilla_VillaAPI.Data
                   Amenity = "",
                   CreatedDate = DateTime.Now
               },
-              new Villa
+              new VillaModel()
               {
                   Id = 5,
                   Name = "Diamond Pool Villa",
@@ -76,8 +79,6 @@ namespace MagicVilla_VillaAPI.Data
                   Amenity = "",
                   CreatedDate = DateTime.Now
               });
-
-
         }
     }
 }
