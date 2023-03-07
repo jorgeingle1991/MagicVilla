@@ -112,6 +112,7 @@ namespace MagicVilla_VillaAPI.Controllers
             }
             catch (Exception ex)
             {
+                _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.IsSucccess = false;
                 _response.ErrorMessages =
                     new List<string>() { ex.ToString() };

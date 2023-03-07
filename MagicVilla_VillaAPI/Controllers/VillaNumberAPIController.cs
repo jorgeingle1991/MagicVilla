@@ -102,6 +102,7 @@ namespace MagicVilla_VillaAPI.Controllers
 
                 if (await _dbVilla.GetAsync(u => u.Id == createDTO.VillaID) == null) {
                     ModelState.AddModelError("CustomError", "Villa ID is invalid");
+                    return BadRequest(ModelState);
                 }
 
 
