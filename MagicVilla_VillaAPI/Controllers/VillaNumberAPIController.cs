@@ -96,12 +96,12 @@ namespace MagicVilla_VillaAPI.Controllers
             {
                 if (await _dbVillaNumber.GetAsync(u => u.No == createDTO.No) != null)
                 {
-                    ModelState.AddModelError("CustomError", "Villa Number already assigned to one record");
+                    ModelState.AddModelError("ErrorMessages", "Villa Number already assigned to one record");
                     return BadRequest(ModelState);
                 }
 
                 if (await _dbVilla.GetAsync(u => u.Id == createDTO.VillaID) == null) {
-                    ModelState.AddModelError("CustomError", "Villa ID is invalid");
+                    ModelState.AddModelError("ErrorMessages", "Villa ID is invalid");
                     return BadRequest(ModelState);
                 }
 
@@ -164,19 +164,19 @@ namespace MagicVilla_VillaAPI.Controllers
         [HttpPut("{id:int}", Name = "UpdateNumberVilla")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> UpdateVilla(int id, [FromBody] VillaNumberUpdateDTO updateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateNumberVilla(int id, [FromBody] VillaNumberUpdateDTO updateDTO)
         {
             try
             {
                 if (updateDTO == null || id != updateDTO.No)
                 {
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    return NotFound(_response);
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
                 }
 
                 if (await _dbVilla.GetAsync(u => u.Id == updateDTO.VillaID) == null)
                 {
-                    ModelState.AddModelError("CustomError", "Villa Number already assigned to one record");
+                    ModelState.AddModelError("ErrorMessages", "Villa Number already assigned to one record");
                 }
 
 
