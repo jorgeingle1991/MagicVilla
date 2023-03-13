@@ -4,7 +4,7 @@ using MagicVilla_WEB.Models.Villa.Dto;
 using MagicVilla_WEB.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Collections.Generic;
+
 
 namespace MagicVilla_WEB.Controllers
 {
@@ -43,10 +43,12 @@ namespace MagicVilla_WEB.Controllers
                 var response = await _villaService.CreateAsync<APIResponse>(model);
                 if(response != null && response.IsSucccess)
                 {
+                    TempData["success"] = "Villa created succesfully";
                     return RedirectToAction(nameof(IndexVilla));
                 }
                    
             }
+            TempData["error"] = "Error encountered";
             return View(model);
         }
 
@@ -70,10 +72,12 @@ namespace MagicVilla_WEB.Controllers
                 var response = await _villaService.UpdateAsync<APIResponse>(model);
                 if (response != null && response.IsSucccess)
                 {
+                    TempData["success"] = "Villa updated succesfully";
                     return RedirectToAction(nameof(IndexVilla));
                 }
 
             }
+            TempData["error"] = "Error encountered";
             return View(model);
         }
 
@@ -97,9 +101,10 @@ namespace MagicVilla_WEB.Controllers
                 var response = await _villaService.DeleteAsync<APIResponse>(model.Id);
                 if (response != null && response.IsSucccess)
                 {
+                    TempData["success"] = "Villa deleted succesfully";
                     return RedirectToAction(nameof(IndexVilla));
                 }
-
+            TempData["error"] = "Error encountered";
             return View(model);
         }
 
