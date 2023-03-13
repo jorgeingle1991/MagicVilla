@@ -14,7 +14,6 @@ namespace MagicVilla_VillaAPI.Repository
         public Repository(ApplicationDbContext db)
         {
             _db = db;
-            _db.VillaNumberModel.Include(u => u.Villa).ToList();
             this.dbSet = _db.Set<T>();
         }
 
