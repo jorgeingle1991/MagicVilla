@@ -4,31 +4,41 @@ using MagicVilla_VillaAPI.Models.VillaNumber;
 using MagicVilla_VillaAPI.Models.VillaNumber.Dto;
 using MagicVilla_VillaAPI.Repository.IRepository.IVilla;
 using MagicVilla_VillaAPI.Repository.IRepository.IVillaNumber;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Net;
 
-namespace MagicVilla_VillaAPI.Controllers
+namespace MagicVilla_VillaAPI.Controllers.VillaNumber
 {
-    [Route("api/VillaNumberAPI")]
+    [Route("api/v{version:apiVersion}/VillaNumberAPI")]
     [ApiController]
-    public class VillaNumberAPIController : ControllerBase
+    [ApiVersion("1.0")]
+    public class VillaNumberAPIv1Controller : ControllerBase
     {
-        private readonly ILogger<VillaNumberAPIController> _logger;
+        private readonly ILogger<VillaNumberAPIv1Controller> _logger;
         protected APIResponse _response;
         private readonly IVillaNumberRepository _dbVillaNumber;
         private readonly IVillaRepository _dbVilla;
         private readonly IMapper _mapper;
 
-        public VillaNumberAPIController(ILogger<VillaNumberAPIController> logger, IVillaNumberRepository dbVillaNumber,IVillaRepository dbVilla, IMapper mapper)
+        public VillaNumberAPIv1Controller(ILogger<VillaNumberAPIv1Controller> logger, IVillaNumberRepository dbVillaNumber, IVillaRepository dbVilla, IMapper mapper)
         {
             _dbVillaNumber = dbVillaNumber;
             _dbVilla = dbVilla;
             _logger = logger;
             _mapper = mapper;
-            this._response = new();
+            _response = new();
+        }
+
+        [HttpGet("GetString")]
+        public IEnumerable<string> Get()
+        {
+            return new string[] { "string1", "string2" };
         }
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> GetVillasNumber()
         {
@@ -48,6 +58,7 @@ namespace MagicVilla_VillaAPI.Controllers
             }
             return _response;
         }
+
 
         [HttpGet("{id:int}", Name = "GetNumberVilla")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -70,7 +81,7 @@ namespace MagicVilla_VillaAPI.Controllers
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     return NotFound(_response);
-                    
+
                 }
 
                 _response.Result = _mapper.Map<VillaNumberDTO>(villaNumber);
@@ -88,6 +99,7 @@ namespace MagicVilla_VillaAPI.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> CreateVillaNumber([FromBody] VillaNumberCreateDTO createDTO)
@@ -100,7 +112,8 @@ namespace MagicVilla_VillaAPI.Controllers
                     return BadRequest(ModelState);
                 }
 
-                if (await _dbVilla.GetAsync(u => u.Id == createDTO.VillaID) == null) {
+                if (await _dbVilla.GetAsync(u => u.Id == createDTO.VillaID) == null)
+                {
                     ModelState.AddModelError("ErrorMessages", "Villa ID is invalid");
                     return BadRequest(ModelState);
                 }
@@ -132,6 +145,7 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("{id:int}", Name = "DeleteNumberVilla")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> DeleteNumberVilla(int id)
         {
             try
@@ -162,6 +176,7 @@ namespace MagicVilla_VillaAPI.Controllers
         }
 
         [HttpPut("{id:int}", Name = "UpdateNumberVilla")]
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

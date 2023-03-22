@@ -1,11 +1,13 @@
 ﻿using MagicVilla_VillaAPI.Models.Authentication;
+using MagicVilla_VillaAPI.Models.Authentication.Dto;
 using MagicVilla_VillaAPI.Models.Villa;
 using MagicVilla_VillaAPI.Models.VillaNumber;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace MagicVilla_VillaAPI.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
             base(options)
@@ -13,13 +15,15 @@ namespace MagicVilla_VillaAPI.Data
 
         }
 
-        public DbSet<LocalUserModel> LocalUsers { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<VillaModel> Villas { get; set; }
         public DbSet<VillaNumberModel> VillaNumberModel { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<VillaModel>().HasData(
               new VillaModel()
               {

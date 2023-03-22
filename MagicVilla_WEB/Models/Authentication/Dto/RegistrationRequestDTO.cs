@@ -1,4 +1,4 @@
-﻿namespace MagicVilla_VillaAPI.Models.Authentication
+﻿namespace MagicVilla_WEB.Models.Authentication.Dto
 {
     public class RegistrationRequestDTO
     {
